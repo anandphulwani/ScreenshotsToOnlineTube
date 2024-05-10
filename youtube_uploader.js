@@ -1,4 +1,3 @@
-const puppeteer = require('puppeteer');
 const puppeteerExtra = require("puppeteer-extra");
 const StealthPlugin = require("puppeteer-extra-plugin-stealth");
 const AnonymizeUAPlugin = require("puppeteer-extra-plugin-anonymize-ua");
@@ -97,7 +96,7 @@ async function uploadFiles(normalizedFilePath, title, description) {
             console.log('WebSocket endpoint not available');
             return;
         }
-        const browser = await puppeteer.connect({
+        const browser = await puppeteerExtra.connect({
             // headless: false,
             // executablePath: chromiumPath,
             defaultViewport: null,
