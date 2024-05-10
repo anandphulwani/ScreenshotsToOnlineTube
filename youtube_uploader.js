@@ -26,6 +26,7 @@ const basepath = process.argv[6]
 const { readConfig, writeConfig } = require('./js_includes/readWriteConfig');
 const { formatDate } = require('./js_includes/formatDate');
 const { sleep } = require('./js_includes/sleep');
+const { getScreenResolutionSync } = require('./js_includes/getScreenResolutionSync');
 const { 
     clickOnUploadButton,
     browseButtonAndSelectFileToUpload,
@@ -48,6 +49,7 @@ let browser;
 let wsEndpoint;
 
 async function loginToYTStudio() {
+    const { _, screenHeight } = getScreenResolutionSync();
     browser = await puppeteerExtra.launch({
         headless: false,
         executablePath: chromiumPath,
@@ -58,6 +60,7 @@ async function loginToYTStudio() {
             "--no-sandbox",
             "--disable-setuid-sandbox",
             "--user-data-dir=${path.join(__dirname, 'dev - user - data')}",
+            `--window-position=0,${screenHeight + 30}` 
         ],
     });
     wsEndpoint = browser.wsEndpoint();
