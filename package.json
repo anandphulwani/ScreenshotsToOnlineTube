@@ -1,0 +1,21 @@
+{
+  "name": "screenshotstoonlinetube",
+  "version": "1.0.0",
+  "description": "Screenshots To Online Tube",
+  "main": "youtube_uploader.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Anand Phulwani",
+  "license": "ISC",
+  "dependencies": {
+    "deasync": "^0.1.29",
+    "puppeteer": "^22.3.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-adblocker": "^2.13.6",
+    "puppeteer-extra-plugin-anonymize-ua": "^2.4.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "puppeteer-xpath": "^0.1.0",
+    "systeminformation": "^5.22.8"
+  }
+}
