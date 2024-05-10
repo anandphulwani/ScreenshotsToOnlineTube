@@ -4,7 +4,7 @@ import os
 from cryptography.fernet import Fernet
 
 class ConfigManager:
-    def __init__(self, filename='config\\settings.ini'):
+    def __init__(self, filename='configs\\settings.ini'):
         self.config_path = filename
         key = b'59BhRzNFJEILmsaAkB4n2XMv2z1t4Mg1JOycKuzL8to='
         self.cipher_suite = Fernet(key)
