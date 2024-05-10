@@ -194,17 +194,17 @@ class VideoProcessor:
         else:
             hourlyTimestamp = False
             
-        # Generate YouTube chapters description
-        chapters_description_path = output_video_path.replace('.mp4', '_chapters.txt')
-        with open(chapters_description_path, 'w') as chapters_file:
-            chapters_file.write(f"Timestamps: \n\n")
+        # Generate YouTube timestamp description
+        description_path = output_video_path.replace('.mp4', '_description.txt')
+        with open(description_path, 'w') as description_file:
+            description_file.write(f"Timestamps: \n\n")
             for hour, noOfImages in hour_markers:
                 # Assuming each image is displayed for `durationOfImageInSecs` seconds
                 timestamp = str(datetime.timedelta(seconds=noOfImages * float(durationOfImageInSecs)))
                 if not hourlyTimestamp:
                     timestamp = ':'.join(timestamp.split(':')[1:])
                 timestamp = timestamp[:timestamp.rfind('.')] if '.' in timestamp else timestamp
-                chapters_file.write(f"{timestamp} - Hour {hour}\n")
+                description_file.write(f"{timestamp} - Hour {hour}\n")
         
         try:
             # Execute the ffmpeg command

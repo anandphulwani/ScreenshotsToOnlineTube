@@ -149,7 +149,7 @@ async function uploadFiles(normalizedFilePath, title, description) {
             // Remove file
             try {
                 fs.unlinkSync(normalizedFilePath);
-                fs.unlinkSync(normalizedFilePath.replace(/\.[^.]*$/, '') + '_chapters.txt');
+                fs.unlinkSync(normalizedFilePath.replace(/\.[^.]*$/, '') + '_description.txt');
             } catch (err) {
                 console.error(err);
             }
@@ -192,8 +192,8 @@ async function uploadFiles(normalizedFilePath, title, description) {
                     const filePath = path.join(basepath, file.name);
                     const normalizedFilePath = path.normalize(filePath);
                     
-                    const chaptersFilePath = normalizedFilePath.replace('.mp4', '_chapters.txt');
-                    const description = fs.readFileSync(chaptersFilePath, 'utf8');
+                    const descriptionFilePath = normalizedFilePath.replace('.mp4', '_description.txt');
+                    const description = fs.readFileSync(descriptionFilePath, 'utf8');
 
                     console.log(`Found file: ${file.name}, Title: ${title}, Processing file: ${normalizedFilePath}`);
                     await uploadFiles(normalizedFilePath, title, description)
