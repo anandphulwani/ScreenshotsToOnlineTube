@@ -193,7 +193,11 @@ async function uploadFiles(normalizedFilePath, title, description) {
                     const normalizedFilePath = path.normalize(filePath);
                     
                     const descriptionFilePath = normalizedFilePath.replace('.mp4', '_description.txt');
-                    const description = fs.readFileSync(descriptionFilePath, 'utf8');
+                    let description = ''
+
+                    if (fs.existsSync(descriptionFilePath)) {
+                        description = fs.readFileSync(descriptionFilePath, 'utf8');
+                    }
 
                     console.log(`Found file: ${file.name}, Title: ${title}, Processing file: ${normalizedFilePath}`);
                     await uploadFiles(normalizedFilePath, title, description)
