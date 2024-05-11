@@ -73,9 +73,18 @@ class VideoProcessor:
             if time_checker.compare_dates():
                 if not self.app.isDailyLimitReached():
                     self.app.startProcessingButton.setText('Stop Processing')
-                    self.process_directories(self.app.basePathInput.text())
                     if not self.upload_videos_recursively():
                         self.app.is_processing = False
+                    if os.path.exists(self.app.basePathInput.text()) and os.path.isdir(self.app.basePathInput.text()):
+                        # Check if there are any subdirectories in the base path
+                        hasDirectories = False
+                        with os.scandir(self.app.basePathInput.text()) as entries:
+                            for entry in entries:
+                                if entry.is_dir():
+                                    hasDirectories = True
+                                    break
+                        if hasDirectories:
+                            self.process_directories(self.app.basePathInput.text())
             else:
                 print("Time mismatch.")
                 isTimeMismatch = True
