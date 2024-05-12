@@ -38,6 +38,7 @@ const {
     addOrModifyDescription,
     selectOrCreatePlaylist,
     clickNextButton,
+    waitForUploadToComplete,
     clickSaveButton,
     clickCloseButton,
     setPrivacyStatus,
@@ -148,6 +149,7 @@ async function uploadFiles(normalizedFilePath, title, description) {
         } while (!await waitForHeading(page, "Visibility"))
         
         await setPrivacyStatus(page, privacystatus);
+        await waitForUploadToComplete(page)
         await clickSaveButton(page);
         const returnValue = await clickCloseButton(page);
         if (returnValue) {

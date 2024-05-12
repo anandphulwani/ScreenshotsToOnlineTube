@@ -252,6 +252,26 @@ async function setPrivacyStatus(page, privacystatus) {
     }
 }
 
+async function waitForUploadToComplete(page) {
+    const xpathUploadingSection = '//ytcp-video-upload-progress/span[@class="progress-label style-scope ytcp-video-upload-progress"]';
+    const uploadingSection = await page.waitForSelector(`::-p-xpath(${xpathUploadingSection})`);
+    await sleep(3 * 1000);
+
+    if (!uploadingSection) {
+        console.log('Element uploading section not found');
+        process.exit(1);
+    }
+    await page.waitForFunction(
+        (xpath) => {
+            const element = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+            return element !== null && !element.innerHTML.startsWith('Uploading ');
+        },
+        { timeout: ( 7200 - 500 ) * 1000 },
+        xpathUploadingSection
+    );
+    await sleep(5 * 1000);
+}
+
 async function clickSaveButton(page) {
     const xpathSaveBtn = "//ytcp-button[@id='done-button']//div[1]";
     const saveButton = await page.waitForSelector(`::-p-xpath(${xpathSaveBtn})`);
@@ -384,6 +404,7 @@ module.exports = {
     addOrModifyTitle,
     selectOrCreatePlaylist,
     clickNextButton,
+    waitForUploadToComplete,
     clickSaveButton,
     clickCloseButton,
     setPrivacyStatus,
