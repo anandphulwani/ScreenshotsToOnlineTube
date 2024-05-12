@@ -17,11 +17,12 @@ const path = require('path');
 // Configuration and paths
 const configPath = '.\\configs\\config.json'; // Your config file path
 const chromiumPath = '.\\bin\\chrome-win\\x64\\chrome.exe'; // Path to your Chromium executable
-const username = process.argv[2]
-const password = process.argv[3]
-const playlist = process.argv[4]
-const privacystatus = process.argv[5]
-const basepath = process.argv[6]
+const showuploader = process.argv[2]
+const username = process.argv[3]
+const password = process.argv[4]
+const playlist = process.argv[5]
+const privacystatus = process.argv[6]
+const basepath = process.argv[7]
 
 const { readConfig, writeConfig } = require('./js_includes/readWriteConfig');
 const { formatDate } = require('./js_includes/formatDate');
@@ -49,19 +50,24 @@ let browser;
 let wsEndpoint;
 
 async function loginToYTStudio() {
-    const { _, screenHeight } = getScreenResolutionSync();
+    const args = [
+        "--start-maximized",
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--user-data-dir=${path.join(__dirname, 'dev - user - data')}",
+    ];
+
+    if (showuploader !== 'True') {
+        const { _, screenHeight } = getScreenResolutionSync();
+        args.push(`--window-position=0,${screenHeight + 30}`);
+    }
+    
     browser = await puppeteerExtra.launch({
         headless: false,
         executablePath: chromiumPath,
         defaultViewport: null,
         ignoreDefaultArgs: ["--disable-extensions"],
-        args: [
-            "--start-maximized",
-            "--no-sandbox",
-            "--disable-setuid-sandbox",
-            "--user-data-dir=${path.join(__dirname, 'dev - user - data')}",
-            `--window-position=0,${screenHeight + 30}` 
-        ],
+        args: args,
     });
     wsEndpoint = browser.wsEndpoint();
 
