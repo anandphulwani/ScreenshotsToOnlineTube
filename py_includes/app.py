@@ -1,5 +1,5 @@
-from PyQt5.QtCore import QTimer, QCoreApplication
-from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt5.QtCore import QTimer, QCoreApplication, Qt
+from PyQt5.QtWidgets import QApplication, QSizePolicy, QSpacerItem, QWidget
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QHBoxLayout, QFileDialog, QComboBox, QCheckBox
 import threading
 import random
@@ -63,6 +63,15 @@ class App(QWidget):
         self.privacyStatusInput = QComboBox(self)
         self.privacyStatusInput.addItems(['private', 'public', 'unlisted'])
         
+        # Show Uploader
+        self.showUploaderLabel = QLabel('Show Uploader')
+        self.showUploaderCheckbox = QCheckBox(self)
+        spacer = QSpacerItem(55, 10, QSizePolicy.Fixed, QSizePolicy.Minimum)
+        showUploaderLayout = QHBoxLayout()
+        showUploaderLayout.addWidget(self.showUploaderLabel)
+        showUploaderLayout.addWidget(self.showUploaderCheckbox)
+        showUploaderLayout.addSpacerItem(spacer)
+
         # Hidden items
         self.dailyLimitReachedUpto = QLineEdit(self)
         self.dailyLimitReachedUpto.hide()
@@ -90,6 +99,7 @@ class App(QWidget):
         layout.addLayout(playlistLayout)
         layout.addWidget(self.privacyStatusLabel)
         layout.addWidget(self.privacyStatusInput)
+        layout.addLayout(showUploaderLayout)
         layout.addWidget(self.saveSettingsButton)
         layout.addWidget(self.startProcessingButton)
 
@@ -102,6 +112,7 @@ class App(QWidget):
             'Password': self.passwordInput,
             'Playlist': self.playlistInput,
             'PrivacyStatus': self.privacyStatusInput,
+            'ShowUploader': self.showUploaderCheckbox,
             'DailyLimitReachedUpto': self.dailyLimitReachedUpto,
             'ProcessedUptoDate': self.processedUptoDate,
             'IsProgramEnabled': self.isProgramEnabled,
@@ -136,6 +147,8 @@ class App(QWidget):
         self.playlistInput.setEnabled(False)
         self.privacyStatusLabel.setEnabled(False)
         self.privacyStatusInput.setEnabled(False)
+        self.showUploaderLabel.setEnabled(False)
+        self.showUploaderCheckbox.setEnabled(False)
         self.saveSettingsButton.setEnabled(False)
         # self.startProcessingButton.setEnabled(False)
 
@@ -151,6 +164,8 @@ class App(QWidget):
         self.playlistInput.setEnabled(True)
         self.privacyStatusLabel.setEnabled(True)
         self.privacyStatusInput.setEnabled(True)
+        self.showUploaderLabel.setEnabled(True)
+        self.showUploaderCheckbox.setEnabled(True)
         self.saveSettingsButton.setEnabled(True)
         self.startProcessingButton.setEnabled(True)
 
