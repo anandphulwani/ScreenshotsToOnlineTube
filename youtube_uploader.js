@@ -87,9 +87,6 @@ async function loginToYTStudio() {
     await sleep(1.5 * 1000)
 
     await page.click('#password input[type="password"]');
-    // console.log('Sleeping Now.')
-    // await sleep(10000)
-    // console.log('Sleeping Over.')
     await page.type('#password input[type="password"]', `${password}`);
 
     await page.waitForSelector('#passwordNext button');
