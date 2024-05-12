@@ -26,6 +26,28 @@ class VideoProcessor:
         self.app = app_instance
         self.app_config_manager = app_config_manager_instance
 
+    def run_subprocess(self, command):
+        self.process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        
+        self.process_stdout = ''
+        # Print output as it arrives
+        for line in self.process.stdout:
+            print(line.strip())
+            if line.strip() == "Error: Daily upload limit reached.":
+                daily_limit_reached_removed_at = datetime.datetime.now() + datetime.timedelta(hours=24, minutes=30)
+                daily_limit_reached_removed_at = int(daily_limit_reached_removed_at.timestamp())
+                self.app.dailyLimitReachedUpto.setText(str(daily_limit_reached_removed_at))
+                self.app_config_manager.prepare_and_save_settings_from_ui(self.app.ui_components)
+                return True
+
+        # Wait for process to complete and capture any remaining stderr output
+        _, stderr = self.process.communicate()
+        self.process_stderr = stderr
+        if stderr:
+            print("Error:", stderr.strip())
+            
+        return self.process.returncode 
+
     def upload_videos_recursively(self):
         command = [
                     "node", 
@@ -40,23 +62,24 @@ class VideoProcessor:
         thread = threading.Thread(target=self.checkAndHideChromiumWindow, args=("about:blank - Chromium",)) # New Tab - Chromium, YouTube - Chromium
         thread.start()
         
-        result = subprocess.run(command, capture_output=True, text=True)
-        print("Output:", result.stdout)
-        print("Error:", result.stderr)
-        # print("ReturnCode:", result.returncode)
+        # Start a new thread to run the subprocess
+        subprocess_thread = threading.Thread(target=self.run_subprocess, args=(command,))
+        subprocess_thread.start()
 
-        if result.returncode == 0:
-            stdout_lines = result.stdout.strip().split('\n')
-            last_line = stdout_lines[-1]
-            if last_line == "Error: Daily upload limit reached.":
-                daily_limit_reached_removed_at = datetime.datetime.now() + datetime.timedelta(hours=24, minutes=30)
-                daily_limit_reached_removed_at = int(daily_limit_reached_removed_at.timestamp())
-                self.app.dailyLimitReachedUpto.setText(str(daily_limit_reached_removed_at))
-                self.app_config_manager.prepare_and_save_settings_from_ui(self.app.ui_components)
+        # Wait for 2 hours and then terminate the subprocess
+        timeout_seconds = 7200  # 2 hours
+        subprocess_thread.join(timeout_seconds)
+
+        # If the subprocess is still running after the timeout, terminate it
+        if subprocess_thread.is_alive():
+            print("The subprocess exceeded the time limit (2 hours) and was terminated.")
+            self.process.terminate()  # Terminate the subprocess
+            subprocess_thread.join()  # Ensure the thread finishes
             return True
-        else:
-            return False
-    
+
+        # If the subprocess finished within the time, return its exit code
+        return self.process.returncode
+
     def checkAndHideChromiumWindow(self, window_title):
         while True:
             hwnd = win32gui.FindWindow(None, window_title)
