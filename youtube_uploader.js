@@ -73,7 +73,7 @@ async function loginToYTStudio() {
 
     const pages = await browser.pages();
     const page = pages[0];
-    await sleep(3 * 1000)
+    await sleep(1.5 * 1000)
     await page.goto('https://studio.youtube.com/');
 
     await page.waitForSelector('input[autocomplete="username"]');
@@ -88,9 +88,10 @@ async function loginToYTStudio() {
 
     await page.click('#password input[type="password"]');
     await page.type('#password input[type="password"]', `${password}`);
+    await sleep(1.5 * 1000)
 
     await page.waitForSelector('#passwordNext button');
-    await sleep(1500);
+    await sleep(1.5 * 1000);
 
     await page.click('#passwordNext button');
 }
