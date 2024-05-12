@@ -52,15 +52,18 @@ class VideoProcessor:
         command = [
                     "node", 
                     "youtube_uploader.js",
+                    f"{self.app.showUploaderCheckbox.isChecked()}", # showuploader
                     f"{self.app.usernameInput.text()}", # username
                     f"{self.app.passwordInput.text()}", # password
                     f"{self.app.playlistInput.text()}", # playlist
                     f"{self.app.privacyStatusInput.currentText()}", # privacystatus
                     f"{os.path.normpath(self.app.basePathInput.text())}", # basepath
         ]
-        
-        thread = threading.Thread(target=self.checkAndHideChromiumWindow, args=("about:blank - Chromium",)) # New Tab - Chromium, YouTube - Chromium
-        thread.start()
+
+        # Hide Chromium window if showuploader is not checked
+        if not self.app.showUploaderCheckbox.isChecked():
+            hidechromium_thread = threading.Thread(target=self.checkAndHideChromiumWindow, args=("about:blank - Chromium",)) # New Tab - Chromium, YouTube - Chromium
+            hidechromium_thread.start()
         
         # Start a new thread to run the subprocess
         subprocess_thread = threading.Thread(target=self.run_subprocess, args=(command,))
