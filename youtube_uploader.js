@@ -156,7 +156,10 @@ async function uploadFiles(normalizedFilePath, title, description) {
             // Remove file
             try {
                 fs.unlinkSync(normalizedFilePath);
-                fs.unlinkSync(normalizedFilePath.replace(/\.[^.]*$/, '') + '_description.txt');
+                descriptionFilePath = normalizedFilePath.replace(/\.[^.]*$/, '') + '_description.txt';
+                if (fs.existsSync(descriptionFilePath)) {
+                    fs.unlinkSync(descriptionFilePath);
+                }
             } catch (err) {
                 console.error(err);
             }

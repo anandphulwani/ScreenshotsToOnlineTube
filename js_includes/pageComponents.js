@@ -254,7 +254,7 @@ async function setPrivacyStatus(page, privacystatus) {
 
 async function waitForUploadToComplete(page) {
     const xpathUploadingSection = '//ytcp-video-upload-progress/span[@class="progress-label style-scope ytcp-video-upload-progress"]';
-    const uploadingSection = await page.waitForSelector(`::-p-xpath(${xpathUploadingSection})`);
+    const uploadingSection = await page.waitForSelector(`::-p-xpath(${xpathUploadingSection})`, { timeout: 7200 * 1000 });
     await sleep(3 * 1000);
 
     if (!uploadingSection) {
