@@ -80,8 +80,8 @@ class VideoProcessor:
             subprocess_thread.join()  # Ensure the thread finishes
             return True
 
-        # If the subprocess finished within the time, return its exit code
-        return self.process.returncode
+        # If the subprocess finished within the time, return boolean value based on exit code
+        return True if self.process.returncode == 0 else False
 
     def checkAndHideChromiumWindow(self, window_title):
         while True:
