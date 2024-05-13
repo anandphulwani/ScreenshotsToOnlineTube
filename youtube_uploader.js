@@ -77,21 +77,21 @@ async function loginToYTStudio() {
     await sleep(1.5 * 1000)
     await page.goto('https://studio.youtube.com/');
 
-    await page.waitForSelector('input[autocomplete="username"]');
+    await page.waitForSelector('input[autocomplete="username"]', { timeout: 5 * 60 * 1000 });
     await page.type('input[autocomplete="username"]', `${username}@gmail.com`);
-    await page.waitForSelector('#identifierNext button');
+    await page.waitForSelector('#identifierNext button', { timeout: 5 * 60 * 1000 });
     await page.click('#identifierNext button');
 
-    await page.waitForSelector('#password');
+    await page.waitForSelector('#password', { timeout: 5 * 60 * 1000 });
     await page.evaluate(() => { document.querySelector('#password'); });
-    await page.waitForSelector('#password input[type="password"]');
+    await page.waitForSelector('#password input[type="password"]', { timeout: 5 * 60 * 1000 });
     await sleep(1.5 * 1000)
 
     await page.click('#password input[type="password"]');
     await page.type('#password input[type="password"]', `${password}`);
     await sleep(1.5 * 1000)
 
-    await page.waitForSelector('#passwordNext button');
+    await page.waitForSelector('#passwordNext button', { timeout: 5 * 60 * 1000 });
     await sleep(1.5 * 1000);
 
     await page.click('#passwordNext button');

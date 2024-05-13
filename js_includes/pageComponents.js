@@ -1,17 +1,17 @@
 const { sleep } = require('./sleep');
 
 async function clickOnUploadButton(page) {
-    await page.waitForSelector('#create-icon');
+    await page.waitForSelector('#create-icon', { timeout: 5 * 60 * 1000 });
     await page.click('#create-icon');
     await sleep(3 * 1000);
 
-    await page.waitForSelector('[test-id="upload-beta"]');
+    await page.waitForSelector('[test-id="upload-beta"]', { timeout: 5 * 60 * 1000 });
     await page.click('[test-id="upload-beta"]');
     await sleep(3 * 1000);
 }
 
 async function browseButtonAndSelectFileToUpload(page, normalizedFilePath) {
-    page.waitForSelector('#select-files-button');
+    page.waitForSelector('#select-files-button', { timeout: 5 * 60 * 1000 });
     await sleep(3 * 1000);
 
     const [fileChooser] = await Promise.all([
@@ -23,10 +23,10 @@ async function browseButtonAndSelectFileToUpload(page, normalizedFilePath) {
 
 async function clickOnVideoMadeNotForKids(page) {
     const xpathDetails = "//*[@id='details']";
-    await page.waitForSelector(`::-p-xpath(${xpathDetails})`);
+    await page.waitForSelector(`::-p-xpath(${xpathDetails})`, { timeout: 5 * 60 * 1000 });
 
     const xpathMadeForKids = "//*[@name='VIDEO_MADE_FOR_KIDS_NOT_MFK']//div[@id='radioContainer']";
-    const onRadioElementMadeForKids = await page.waitForSelector(`::-p-xpath(${xpathMadeForKids})`);
+    const onRadioElementMadeForKids = await page.waitForSelector(`::-p-xpath(${xpathMadeForKids})`, { timeout: 5 * 60 * 1000 });
     await sleep(3 * 1000);
 
     if (onRadioElementMadeForKids) {
@@ -39,7 +39,7 @@ async function clickOnVideoMadeNotForKids(page) {
 
 async function clickOnShowMoreShowLess(page) {
     const toggleXPathShowMoreShowLess = "//div[contains(@class, 'toggle-section')]//*[@id='toggle-button']//div[contains(@class, 'label') and text()='Show more']";
-    const toggleButtonShowMoreShowLess = await page.waitForSelector(`::-p-xpath(${toggleXPathShowMoreShowLess})`);
+    const toggleButtonShowMoreShowLess = await page.waitForSelector(`::-p-xpath(${toggleXPathShowMoreShowLess})`, { timeout: 5 * 60 * 1000 });
     await sleep(3 * 1000);
 
     if (toggleButtonShowMoreShowLess) {
@@ -60,7 +60,7 @@ async function clickOnShowMoreShowLess(page) {
 async function clickOnAllowAutomaticPlaces(page) {
     // const xpathAllowAutomaticPlaces = "//*[@id='has-autoplaces-mentioned-checkbox']//div[@id='checkbox-container']";
     const xpathAllowAutomaticPlaces = "//div[contains(text(), 'Allow automatic concepts')]/ancestor::div[@id='root-container']//div[@id='checkbox-container']";
-    const onCheckboxAllowAutomaticPlaces = await page.waitForSelector(`::-p-xpath(${xpathAllowAutomaticPlaces})`);
+    const onCheckboxAllowAutomaticPlaces = await page.waitForSelector(`::-p-xpath(${xpathAllowAutomaticPlaces})`, { timeout: 5 * 60 * 1000 });
     await sleep(3 * 1000);
 
     if (onCheckboxAllowAutomaticPlaces) {
@@ -74,7 +74,7 @@ async function clickOnAllowAutomaticPlaces(page) {
 async function selectOrCreatePlaylist(page, playlist, privacystatus) {
     // Click on playlists dropdown
     const xpathYTCPPlaylists = "//ytcp-video-metadata-playlists";
-    const playlistButton = await page.waitForSelector(`::-p-xpath(${xpathYTCPPlaylists})`);
+    const playlistButton = await page.waitForSelector(`::-p-xpath(${xpathYTCPPlaylists})`, { timeout: 5 * 60 * 1000 });
     if (playlistButton) {
         await playlistButton.click();
     } else {
@@ -107,9 +107,9 @@ async function selectOrCreatePlaylist(page, playlist, privacystatus) {
 
             const xpathInnerSpan = `//*[@id='playlists-list']//div[@id='items']//span[contains(concat(' ', normalize-space(@class), ' '), ' checkbox-label ')]//span[contains(text(), '${playlist}')]`;
             try {
-                await page.waitForSelector(`::-p-xpath(${xpathInnerSpan})`, { timeout: 5000 });
+                await page.waitForSelector(`::-p-xpath(${xpathInnerSpan})`, { timeout: 5000 }, { timeout: 5 * 60 * 1000 });
                 const xpathPrecedingSibling = `${xpathInnerSpan}/../preceding-sibling::*[1]`;
-                const selectPlaylistCheckbox = await page.waitForSelector(`::-p-xpath(${xpathPrecedingSibling})`);
+                const selectPlaylistCheckbox = await page.waitForSelector(`::-p-xpath(${xpathPrecedingSibling})`, { timeout: 5 * 60 * 1000 });
                 if (selectPlaylistCheckbox) {
                     await selectPlaylistCheckbox.click();
                     await page.waitForFunction(
@@ -137,7 +137,7 @@ async function selectOrCreatePlaylist(page, playlist, privacystatus) {
     if (createPlaylist) 
     {
         const xpathCreatePlaylistDropDown = "//ytcp-button[contains(concat(' ', normalize-space(@class), ' '), ' new-playlist-button ')]";
-        const createPlaylistDropDown = await page.waitForSelector(`::-p-xpath(${xpathCreatePlaylistDropDown})`, { visible: true });
+        const createPlaylistDropDown = await page.waitForSelector(`::-p-xpath(${xpathCreatePlaylistDropDown})`, { visible: true }, { timeout: 5 * 60 * 1000 });
         await sleep(3 * 1000);
 
         if (!createPlaylistDropDown) {
@@ -145,7 +145,7 @@ async function selectOrCreatePlaylist(page, playlist, privacystatus) {
         }
         await createPlaylistDropDown.click();
         const xpathCreatePlaylistButton = "//tp-yt-paper-item[@test-id='new_playlist']";
-        const createPlaylistButton = await page.waitForSelector(`::-p-xpath(${xpathCreatePlaylistButton})`, { visible: true });
+        const createPlaylistButton = await page.waitForSelector(`::-p-xpath(${xpathCreatePlaylistButton})`, { visible: true }, { timeout: 5 * 60 * 1000 });
         await sleep(3 * 1000);
 
         if (!createPlaylistButton) {
@@ -154,7 +154,7 @@ async function selectOrCreatePlaylist(page, playlist, privacystatus) {
         await createPlaylistButton.click();
 
         const xpathPlaylistTitle = "//ytcp-playlist-metadata-editor//*[@id='title-textarea']//div[@id='child-input']";
-        const playlistTitle = await page.waitForSelector(`::-p-xpath(${xpathPlaylistTitle})`, { visible: true });
+        const playlistTitle = await page.waitForSelector(`::-p-xpath(${xpathPlaylistTitle})`, { visible: true }, { timeout: 5 * 60 * 1000 });
         await playlistTitle.click();
         await sleep(3 * 1000);
 
@@ -162,13 +162,13 @@ async function selectOrCreatePlaylist(page, playlist, privacystatus) {
         await sleep(3 * 1000);
 
         const xpathPlaylistPrivacyStatus = "//ytcp-playlist-metadata-editor//*[@id='visibility-selector']//ytcp-dropdown-trigger";
-        const playlistPrivacyStatus = await page.waitForSelector(`::-p-xpath(${xpathPlaylistPrivacyStatus})`, { visible: true });
+        const playlistPrivacyStatus = await page.waitForSelector(`::-p-xpath(${xpathPlaylistPrivacyStatus})`, { visible: true }, { timeout: 5 * 60 * 1000 });
         await playlistPrivacyStatus.click();
         await sleep(3 * 1000);
 
         let xpathPlaylistPrivacyStatusSelection = "//ytcp-playlist-metadata-editor//ytcp-text-menu[@id='visibility-menu']//tp-yt-paper-listbox[@id='paper-list']";
         xpathPlaylistPrivacyStatusSelection += `//*[@role='option' and @test-id='${privacystatus.toUpperCase()}']`;
-        const playlistPrivacyStatusSelection = await page.waitForSelector(`::-p-xpath(${xpathPlaylistPrivacyStatusSelection})`, { visible: true });
+        const playlistPrivacyStatusSelection = await page.waitForSelector(`::-p-xpath(${xpathPlaylistPrivacyStatusSelection})`, { visible: true }, { timeout: 5 * 60 * 1000 });
         await playlistPrivacyStatusSelection.click();
         await sleep(3 * 1000);
 
@@ -189,7 +189,7 @@ async function selectOrCreatePlaylist(page, playlist, privacystatus) {
         }
 
         const xpathCreateButton = "//ytcp-button[@id='create-button']//div[1]";
-        const createButton = await page.waitForSelector(`::-p-xpath(${xpathCreateButton})`);
+        const createButton = await page.waitForSelector(`::-p-xpath(${xpathCreateButton})`, { timeout: 5 * 60 * 1000 });
         await sleep(3 * 1000);
     
         if (createButton) {
@@ -202,7 +202,7 @@ async function selectOrCreatePlaylist(page, playlist, privacystatus) {
 
     try {
         const xpathDoneButton = "//ytcp-button[contains(concat(' ', normalize-space(@class), ' '), ' ytcp-playlist-dialog ') and @label='Done']"
-        const playlistDoneButton = await page.waitForSelector(`::-p-xpath(${xpathDoneButton})`);
+        const playlistDoneButton = await page.waitForSelector(`::-p-xpath(${xpathDoneButton})`, { timeout: 5 * 60 * 1000 });
         if (playlistDoneButton) {
             await playlistDoneButton.click();
         } else {
@@ -228,7 +228,7 @@ async function selectOrCreatePlaylist(page, playlist, privacystatus) {
 
 async function clickNextButton(page) {
     const xpathNextBtn = "//ytcp-button[@id='next-button']//div[1]";
-    const nextButton = await page.waitForSelector(`::-p-xpath(${xpathNextBtn})`);
+    const nextButton = await page.waitForSelector(`::-p-xpath(${xpathNextBtn})`, { timeout: 5 * 60 * 1000 });
     await sleep(3 * 1000);
 
     if (nextButton) {
@@ -241,7 +241,7 @@ async function clickNextButton(page) {
 
 async function setPrivacyStatus(page, privacystatus) {
     const xpathPrivacyRadios = `//*[@id='privacy-radios']//*[@role='radio' and @name='${privacystatus.toUpperCase()}']`;
-    const privacyRadioButton = await page.waitForSelector(`::-p-xpath(${xpathPrivacyRadios})`);
+    const privacyRadioButton = await page.waitForSelector(`::-p-xpath(${xpathPrivacyRadios})`, { timeout: 5 * 60 * 1000 });
     await sleep(3 * 1000);
 
     if (privacyRadioButton) {
@@ -254,7 +254,7 @@ async function setPrivacyStatus(page, privacystatus) {
 
 async function waitForUploadToComplete(page) {
     const xpathUploadingSection = '//ytcp-video-upload-progress/span[@class="progress-label style-scope ytcp-video-upload-progress"]';
-    const uploadingSection = await page.waitForSelector(`::-p-xpath(${xpathUploadingSection})`, { timeout: 7200 * 1000 });
+    const uploadingSection = await page.waitForSelector(`::-p-xpath(${xpathUploadingSection})`, { timeout: 7200 * 1000 }, { timeout: 5 * 60 * 1000 });
     await sleep(3 * 1000);
 
     if (!uploadingSection) {
@@ -274,7 +274,7 @@ async function waitForUploadToComplete(page) {
 
 async function clickSaveButton(page) {
     const xpathSaveBtn = "//ytcp-button[@id='done-button']//div[1]";
-    const saveButton = await page.waitForSelector(`::-p-xpath(${xpathSaveBtn})`);
+    const saveButton = await page.waitForSelector(`::-p-xpath(${xpathSaveBtn})`, { timeout: 5 * 60 * 1000 });
     await sleep(3 * 1000);
 
     if (saveButton) {
@@ -287,7 +287,7 @@ async function clickSaveButton(page) {
 
 async function clickCloseButton(page) {
     const xpathCloseBtn = "//ytcp-button[@id='close-button']//div[1]";
-    const closeButton = await page.waitForSelector(`::-p-xpath(${xpathCloseBtn})`);
+    const closeButton = await page.waitForSelector(`::-p-xpath(${xpathCloseBtn})`, { timeout: 5 * 60 * 1000 });
     await sleep(3 * 1000);
 
     if (closeButton) {
@@ -302,7 +302,7 @@ async function clickCloseButton(page) {
 
 async function addOrModifyTitle(page, title) {
     const xpathTitle = "//*[@id='title-textarea']//*[@id='child-input']//div[@id='textbox']";
-    const titleDiv = await page.waitForSelector(`::-p-xpath(${xpathTitle})`);
+    const titleDiv = await page.waitForSelector(`::-p-xpath(${xpathTitle})`, { timeout: 5 * 60 * 1000 });
     if (titleDiv) {
         await titleDiv.click();
     } else {
@@ -328,7 +328,7 @@ async function addOrModifyTitle(page, title) {
 
 async function addOrModifyDescription(page, description) {
     const xpathTitle = "//*[@id='description-wrapper']//*[@id='child-input']//div[@id='textbox']";
-    const descriptionDiv = await page.waitForSelector(`::-p-xpath(${xpathTitle})`);
+    const descriptionDiv = await page.waitForSelector(`::-p-xpath(${xpathTitle})`, { timeout: 5 * 60 * 1000 });
     await sleep(3 * 1000);
 
     if (descriptionDiv) {
