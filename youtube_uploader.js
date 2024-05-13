@@ -74,27 +74,36 @@ async function loginToYTStudio() {
 
     const pages = await browser.pages();
     const page = pages[0];
-    await sleep(1.5 * 1000)
-    await page.goto('https://studio.youtube.com/');
+    await sleep(5 * 1000)
+    await page.goto('https://studio.youtube.com/', { timeout: 5 * 60 * 1000 });
 
-    await page.waitForSelector('input[autocomplete="username"]', { timeout: 5 * 60 * 1000 });
+    await page.waitForSelector('input[autocomplete="username"]', { timeout: 5 * 60 * 1000 , visible: true });
+    await sleep(1.5 * 1000)
+
     await page.type('input[autocomplete="username"]', `${username}@gmail.com`);
-    await page.waitForSelector('#identifierNext button', { timeout: 5 * 60 * 1000 });
-    await page.click('#identifierNext button');
-
-    await page.waitForSelector('#password', { timeout: 5 * 60 * 1000 });
-    await page.evaluate(() => { document.querySelector('#password'); });
-    await page.waitForSelector('#password input[type="password"]', { timeout: 5 * 60 * 1000 });
     await sleep(1.5 * 1000)
+
+    await page.waitForSelector('#identifierNext button', { timeout: 5 * 60 * 1000 , visible: true });
+    await sleep(1.5 * 1000)
+
+    await page.click('#identifierNext button');
+    await sleep(1.5 * 1000)
+
+    await page.waitForSelector('#password', { timeout: 5 * 60 * 1000, visible: true });
+    await page.evaluate(() => { document.querySelector('#password'); });
+    await page.waitForSelector('#password input[type="password"]', { timeout: 5 * 60 * 1000 , visible: true });
 
     await page.click('#password input[type="password"]');
+    await sleep(1.5 * 1000)
+
     await page.type('#password input[type="password"]', `${password}`);
     await sleep(1.5 * 1000)
 
-    await page.waitForSelector('#passwordNext button', { timeout: 5 * 60 * 1000 });
+    await page.waitForSelector('#passwordNext button', { timeout: 5 * 60 * 1000 , visible: true });
     await sleep(1.5 * 1000);
 
     await page.click('#passwordNext button');
+    await sleep(5 * 1000);
 }
 
 async function uploadFiles(normalizedFilePath, title, description) {
